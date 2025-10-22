@@ -13,7 +13,7 @@ public class EnderecoDaoImpl implements EnderecoDao {
     }
 
     @Override
-    public List<Endereco> viewEndereco(int idCliente) {
+    public List<Endereco> viewEnderecoById(int idCliente) {
         List<Endereco> list = new ArrayList<>();
         return list;
     }

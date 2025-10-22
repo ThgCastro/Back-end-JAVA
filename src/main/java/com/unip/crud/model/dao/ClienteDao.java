@@ -7,7 +7,7 @@ import java.util.List;
 public interface ClienteDao {
 
     void createCliente(Cliente c);
-    List<Cliente> viewCliente();
-    void updateCliente(Long id, String newNome);
-    void deleteCliente(Long id);
+    List<Cliente> viewClienteById(Long id);
+    void updateClienteById(Long id, String newNome);
+    void deleteClienteById(Long id);
 }

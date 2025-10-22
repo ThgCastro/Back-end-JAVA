@@ -18,13 +18,13 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public List<Cliente> viewCliente() {
-        List<Cliente> list = new ArrayList<>();
-        return list;
+    public List<Cliente> viewClienteById(Long id) {
+        return List.of();
     }
 
+
     @Override
-    public void updateCliente(Long id, String newNome) {
+    public void updateClienteById(Long id, String newNome) {
         try {
 
         } catch(Exception e) {
@@ -33,7 +33,7 @@ public class ClienteDaoImpl implements ClienteDao {
     }
 
     @Override
-    public void deleteCliente(Long id) {
+    public void deleteClienteById(Long id) {
         try {
 
         } catch (Exception e) {

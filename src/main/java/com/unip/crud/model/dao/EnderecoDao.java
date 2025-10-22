@@ -7,5 +7,5 @@ import java.util.List;
 public interface EnderecoDao {
 
     void criarEndereco();
-    List<Endereco> viewEndereco(int idCliente);
+    List<Endereco> viewEnderecoById(int idCliente);
 }
