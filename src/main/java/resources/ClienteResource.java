@@ -16,16 +16,16 @@ import java.util.List;
 public class ClienteResource {
 
     @Autowired
-    private ClienteService service;
+    private ClienteService clienteService;
 
-    public ResponseEntity<List<Cliente>> findAll(){
-        List<Cliente> list = service.saveCliente();
+    public ResponseEntity<List<Cliente>> findAll(Cliente cliente){
+        List<Cliente> list = clienteService.saveCliente(cliente);
         return ResponseEntity.ok().body(list);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Cliente> findById(@PathVariable Long id){
-        Cliente obj = service.;
+        Cliente obj = clienteService.;
         return ResponseEntity.ok().body(obj);
     }
 }

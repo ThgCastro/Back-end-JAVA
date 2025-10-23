@@ -19,15 +19,22 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String email;
+
     private Date dataNascimento;
+
     @Column(unique = true)
     private String cpf;
+
     private String nome;
+
 
     @OneToMany(mappedBy = "cliente")
     @JsonIgnore
     private List<Endereco> enderecos = new ArrayList<>();
+
 
     public Cliente() {
     }

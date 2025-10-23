@@ -22,9 +22,8 @@ public class ClienteDaoImpl implements ClienteDao {
         return List.of();
     }
 
-
     @Override
-    public void updateClienteById(Long id, String newNome) {
+    public void updateClienteById(Long id, Cliente clienteAtualizado) {
         try {
 
         } catch(Exception e) {

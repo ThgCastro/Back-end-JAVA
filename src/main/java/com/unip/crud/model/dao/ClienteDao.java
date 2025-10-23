@@ -8,6 +8,6 @@ public interface ClienteDao {
 
     void createCliente(Cliente c);
     List<Cliente> viewClienteById(Long id);
-    void updateClienteById(Long id, String newNome);
+    void updateClienteById(Long id, Cliente clienteAtualizado);
     void deleteClienteById(Long id);
 }
