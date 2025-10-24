@@ -4,23 +4,17 @@ import com.unip.crud.model.Cliente;
 import com.unip.crud.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cliente")
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
-    private final ClienteService clienteService;
-
-    public ClienteController(ClienteService clienteService) {
-        this.clienteService = clienteService;
-    }
+    private ClienteService clienteService;
 
     @PostMapping
     public ResponseEntity<Void> saveCliente(@RequestBody Cliente cliente){
@@ -28,15 +22,25 @@ public class ClienteController {
         return ResponseEntity.ok().build();
     }
 
-    public boolean deleteClienteById(Long id) {
-        if(id == null){
-            return false;
-        }
-        return true;
+    @GetMapping
+    public List<Cliente> findAllCliente(){
+        return clienteService.findAllCliente();
     }
 
-    @PostMapping()
-    public void updateClienteById(Long id, Cliente clienteAtualizado){
-        clienteService.updateClienteById(id, clienteAtualizado);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Cliente> findClienteById(@PathVariable Long id){
+        return ResponseEntity.ok(clienteService.findClienteById(id));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteClienteById(@RequestParam Long id) {
+        clienteService.deleteClienteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping
+    public ResponseEntity<Void> updateClienteById(@RequestParam Long id, @RequestBody Cliente cliente){
+        clienteService.updateClienteById(id, cliente);
+        return ResponseEntity.ok().build();
     }
 }
