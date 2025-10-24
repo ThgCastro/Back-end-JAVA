@@ -4,7 +4,14 @@ import com.unip.crud.model.Cliente;
 import com.unip.crud.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +24,8 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping
-    public ResponseEntity<Void> saveCliente(@RequestBody Cliente cliente){
-        clienteService.saveCliente(cliente);
+    public ResponseEntity<Void> createCliente(@RequestBody Cliente cliente){
+        clienteService.createCliente(cliente);
         return ResponseEntity.ok().build();
     }
 
@@ -33,13 +40,13 @@ public class ClienteController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteClienteById(@RequestParam Long id) {
+    public ResponseEntity<Void> deleteClienteById(@PathVariable Long id) {
         clienteService.deleteClienteById(id);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping
-    public ResponseEntity<Void> updateClienteById(@RequestParam Long id, @RequestBody Cliente cliente){
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateClienteById(@PathVariable Long id, @RequestBody Cliente cliente){
         clienteService.updateClienteById(id, cliente);
         return ResponseEntity.ok().build();
     }

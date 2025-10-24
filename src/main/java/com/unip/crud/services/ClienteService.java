@@ -4,10 +4,7 @@ import com.unip.crud.model.Cliente;
 import com.unip.crud.repositories.ClienteRepository;
 import com.unip.crud.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +16,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
 
-    public void saveCliente(Cliente cliente){
+    public void createCliente(Cliente cliente){
         clienteRepository.save(cliente);
     }
 
@@ -51,6 +48,6 @@ public class ClienteService {
         if(clienteAtualizado.getDataNascimento() != null){
             clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
         }
-        clienteRepository.saveAndFlush(clienteAtualizado);
+        clienteRepository.save(clienteExistente);
     }
 }
