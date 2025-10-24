@@ -9,15 +9,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @PostMapping
+
     public void saveCliente(Cliente cliente){
-        clienteRepository.saveAndFlush(cliente);
+        clienteRepository.save(cliente);
+    }
+
+    public List<Cliente> findAllCliente(){
+        return clienteRepository.findAll();
+    }
+
+    public Cliente findClienteById(Long id){
+        Optional<Cliente> obj = clienteRepository.findById(id);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public void deleteClienteById (Long id){
