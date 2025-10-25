@@ -27,6 +27,7 @@ public class testeConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         Cliente cli1 = new Cliente(null, LocalDate.parse("01-01-2000", dtf), "123456789", "João Silva");
         Cliente cli2 = new Cliente(null, LocalDate.parse("20-12-1985" ,dtf), "987654321", "Maria Souza");
 
