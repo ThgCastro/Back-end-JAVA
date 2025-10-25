@@ -1,6 +1,11 @@
 package com.unip.crud.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 import java.util.Objects;
 
@@ -19,7 +24,7 @@ public class Endereco {
     private Integer numero;
 
     @ManyToOne
-    @JoinColumn(name = "Cliente_id")
+    @JoinColumn(name = "Id_Proprietario")
     private Cliente cliente;
 
     public Endereco() {

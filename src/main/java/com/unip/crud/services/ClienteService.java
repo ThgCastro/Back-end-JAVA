@@ -42,9 +42,6 @@ public class ClienteService {
         if(clienteAtualizado.getCpf() != null){
             clienteExistente.setCpf(clienteAtualizado.getCpf());
         }
-        if(clienteAtualizado.getEmail() != null){
-            clienteExistente.setEmail(clienteAtualizado.getEmail());
-        }
         if(clienteAtualizado.getDataNascimento() != null){
             clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
         }
