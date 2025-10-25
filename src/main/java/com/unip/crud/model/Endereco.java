@@ -1,10 +1,6 @@
 package com.unip.crud.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
@@ -14,23 +10,36 @@ public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String endereco;
+
+    private String complemento;
     private Integer cep;
+    private String nomeLogradouro;
     private String cidade;
     private String estado;
+    private Integer numero;
 
     @ManyToOne
+    @JoinColumn(name = "Cliente_id")
     private Cliente cliente;
 
     public Endereco() {
     }
 
-    public Endereco(Long id, String endereco, Integer cep, String cidade, String estado, Cliente cliente) {
+    public Endereco(Long id, String complemento, Integer cep, String nomeLogradouro, String cidade, String estado, Integer numero) {
         this.id = id;
-        this.endereco = endereco;
+        this.complemento = complemento;
         this.cep = cep;
+        this.nomeLogradouro = nomeLogradouro;
         this.cidade = cidade;
         this.estado = estado;
+        this.numero = numero;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
@@ -42,12 +51,12 @@ public class Endereco {
         this.id = id;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getComplemento() {
+        return complemento;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
     }
 
     public Integer getCep() {
@@ -56,6 +65,14 @@ public class Endereco {
 
     public void setCep(Integer cep) {
         this.cep = cep;
+    }
+
+    public String getNomeLogradouro() {
+        return nomeLogradouro;
+    }
+
+    public void setNomeLogradouro(String nomeLogradouro) {
+        this.nomeLogradouro = nomeLogradouro;
     }
 
     public String getCidade() {
@@ -74,12 +91,12 @@ public class Endereco {
         this.estado = estado;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Integer getNumero() {
+        return numero;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
 
     @Override
@@ -98,7 +115,7 @@ public class Endereco {
     public String toString() {
         return "Endereco{" +
                 "id=" + id +
-                ", endereco='" + endereco + '\'' +
+                ", endereco='" + nomeLogradouro + '\'' +
                 ", cep=" + cep +
                 ", cidade='" + cidade + '\'' +
                 ", estado='" + estado + '\'' +

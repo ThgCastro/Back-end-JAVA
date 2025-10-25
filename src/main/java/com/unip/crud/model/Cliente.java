@@ -2,7 +2,6 @@ package com.unip.crud.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,8 +25,10 @@ public class Cliente {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dataNascimento;
 
-    private String cpf;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate ultimaDataCompra;
 
+    private String cpf;
     private String nome;
 
 
@@ -39,15 +40,24 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(Long id) {
+    public Cliente(Long id, String email, LocalDate dataNascimento, LocalDate ultimaDataCompra, String cpf, String nome) {
         this.id = id;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.ultimaDataCompra = ultimaDataCompra;
+        this.cpf = cpf;
+        this.nome = nome;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,6 +75,14 @@ public class Cliente {
 
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public LocalDate getUltimaDataCompra() {
+        return ultimaDataCompra;
+    }
+
+    public void setUltimaDataCompra(LocalDate ultimaDataCompra) {
+        this.ultimaDataCompra = ultimaDataCompra;
     }
 
     public String getCpf() {
