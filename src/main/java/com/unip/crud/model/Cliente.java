@@ -30,8 +30,7 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(Long id, LocalDate dataNascimento, String cpf, String nome) {
-        this.id = id;
+    public Cliente(LocalDate dataNascimento, String cpf, String nome) {
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.nome = nome;

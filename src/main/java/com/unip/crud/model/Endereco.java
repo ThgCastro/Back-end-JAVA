@@ -30,8 +30,7 @@ public class Endereco {
     public Endereco() {
     }
 
-    public Endereco(Long id, String complemento, Integer cep, String nomeLogradouro, String cidade, String estado, Integer numero) {
-        this.id = id;
+    public Endereco(String complemento, Integer cep, String nomeLogradouro, String cidade, String estado, Integer numero) {
         this.complemento = complemento;
         this.cep = cep;
         this.nomeLogradouro = nomeLogradouro;
@@ -102,29 +101,5 @@ public class Endereco {
 
     public void setNumero(Integer numero) {
         this.numero = numero;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Endereco endereco = (Endereco) o;
-        return Objects.equals(id, endereco.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Endereco{" +
-                "id=" + id +
-                ", endereco='" + nomeLogradouro + '\'' +
-                ", cep=" + cep +
-                ", cidade='" + cidade + '\'' +
-                ", estado='" + estado + '\'' +
-                ", cliente=" + cliente +
-                '}';
     }
 }
