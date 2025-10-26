@@ -1,4 +1,4 @@
-package com.unip.crud.config;
+/*package com.unip.crud.config;
 
 import com.unip.crud.model.Cliente;
 import com.unip.crud.model.Endereco;
@@ -9,13 +9,14 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Configuration
 @Profile("teste")
-public class testeConfig implements CommandLineRunner {
+public class TesteConfig implements CommandLineRunner {
 
     @Autowired
     private ClienteRepository clienteRepository;
@@ -48,3 +49,4 @@ public class testeConfig implements CommandLineRunner {
         enderecoRepository.saveAll(Arrays.asList(end1, end2, end3));
     }
 }
+*/

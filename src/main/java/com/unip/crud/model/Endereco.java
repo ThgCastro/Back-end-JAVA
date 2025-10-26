@@ -24,7 +24,7 @@ public class Endereco {
     private Integer numero;
 
     @ManyToOne
-    @JoinColumn(name = "Id_Proprietario")
+    @JoinColumn(name = "id_proprietario", nullable = false)
     private Cliente cliente;
 
     public Endereco() {

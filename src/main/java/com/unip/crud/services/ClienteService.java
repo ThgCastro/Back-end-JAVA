@@ -2,7 +2,9 @@ package com.unip.crud.services;
 
 import com.unip.crud.model.Cliente;
 import com.unip.crud.repositories.ClienteRepository;
+import com.unip.crud.repositories.EnderecoRepository;
 import com.unip.crud.services.exceptions.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,12 @@ public class ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    private EnderecoRepository enderecoRepository;
+
+    public ClienteService(EnderecoRepository enderecoRepository) {
+        this.enderecoRepository = enderecoRepository;
+    }
 
 
     public void createCliente(Cliente cliente){
@@ -29,10 +37,14 @@ public class ClienteService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    @Transactional
     public void deleteClienteById (Long id){
-        clienteRepository.deleteById(id);
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente nao encontrado"));
+        enderecoRepository.deleteAll(cliente.getEnderecos());
+        clienteRepository.delete(cliente);
     }
 
+    @Transactional
     public void updateClienteById(Long id, Cliente clienteAtualizado){
         Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
 

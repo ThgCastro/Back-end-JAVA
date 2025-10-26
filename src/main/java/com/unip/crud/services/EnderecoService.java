@@ -28,8 +28,9 @@ public class EnderecoService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public void deleteEnderecoById(Long id){
-        enderecoRepository.deleteById(id);
+    public void deleteEndereco(Long id){
+        Endereco endereco = findEnderecoById(id);
+        enderecoRepository.delete(endereco);
     }
 
     public void updateEnderecoById(Long id, Endereco enderecoAtualizado){
