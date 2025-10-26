@@ -5,13 +5,22 @@
 <h1>Endereços de <span th:text="${cliente.nome}"></span></h1>
 <a th:href="@{'/enderecos/novo/' + ${cliente.id}}">Novo Endereço</a>
 <table>
-    <thead><tr><th>ID</th><th>Rua</th><th>Cidade</th><th>CEP</th></tr></thead>
+    <thead><tr>
+        <th>ID</th>
+        <th>Logradouro</th>
+        <th>Complemento</th>
+        <th>Numero</th>
+        <th>CEP</th>
+        <th>Cidade</th>
+        <th>Estado</th>
+    </tr>
+    </thead>
     <tbody>
         <tr th:each="end : ${listaDeEnderecos}">
             <td th:text="${end.id}"></td>
             <td th:text="${end.nomeLogradouro}"></td>
-            <td th:text="${end.numero}"></td>
             <td th:text="${end.complemento}"></td>
+            <td th:text="${end.numero}"></td>
             <td th:text="${end.cep}"></td>
             <td th:text="${end.cidade}"></td>
             <td th:text="${end.estado}"></td>

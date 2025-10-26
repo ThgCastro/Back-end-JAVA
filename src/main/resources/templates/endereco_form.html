@@ -5,7 +5,7 @@
     <h1>Novo Endereço</h1>
     <form th:action="@{/enderecos/salvar}" th:object="${endereco}" method="post">
         <input type="hidden" th:field="*{id}" />
-        <label>Nome da rua: <input th:field="*{nomeLogradouro}"/></label><br/>
+        <label>Nome Logradouro: <input th:field="*{nomeLogradouro}"/></label><br/>
         <label>Numero: <input th:field="*{numero}"/></label><br/>
         <label>Complemento: <input th:field="*{complemento}"/></label><br/>
         <label>CEP: <input th:field="*{cep}"/></label><br/>
