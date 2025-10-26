@@ -29,35 +29,11 @@ public class EnderecoService {
         return enderecoRepository.findByClienteId(clienteId);
     }
 
-    public void saveEndereco(Endereco endereco){
-        enderecoRepository.save(endereco);
+    public Endereco saveEndereco(Endereco endereco){
+        return enderecoRepository.save(endereco);
     }
 
     public void deleteEnderecoById(Long id){
         enderecoRepository.deleteById(id);
-    }
-
-    public void updateEnderecoById(Long id, Endereco enderecoAtualizado){
-        Endereco enderecoExistente = enderecoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-
-        if(enderecoAtualizado.getNomeLogradouro() != null){
-            enderecoExistente.setNomeLogradouro(enderecoAtualizado.getNomeLogradouro());
-        }
-        if(enderecoAtualizado.getComplemento() != null){
-            enderecoExistente.setComplemento(enderecoAtualizado.getComplemento());
-        }
-        if(enderecoAtualizado.getNumero() != null){
-            enderecoExistente.setNumero(enderecoAtualizado.getNumero());
-        }
-        if(enderecoAtualizado.getCep() != null){
-            enderecoExistente.setCep(enderecoAtualizado.getCep());
-        }
-        if(enderecoAtualizado.getCidade() != null){
-            enderecoExistente.setCidade(enderecoAtualizado.getCidade());
-        }
-        if(enderecoAtualizado.getEstado() != null){
-            enderecoExistente.setEstado(enderecoAtualizado.getEstado());
-        }
-        enderecoRepository.save(enderecoExistente);
     }
 }

@@ -3,15 +3,10 @@ package com.unip.crud.controller;
 import com.unip.crud.model.Endereco;
 import com.unip.crud.services.ClienteService;
 import com.unip.crud.services.EnderecoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/enderecos")
@@ -53,5 +48,18 @@ public class EnderecoController {
         enderecoService.deleteEnderecoById(id);
         if(clienteId != null) return "redirect:/enderecos/cliente/" + clienteId;
         return "redirect:/clientes";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editarForm(@PathVariable Long id, Model model){
+        Endereco endereco = enderecoService.findEnderecoById(id);
+        model.addAttribute("endereco", endereco);
+        return "endereco_form";
+    }
+
+    @PostMapping("/atualizar")
+    public String atualizar(@ModelAttribute Endereco endereco){
+        enderecoService.saveEndereco(endereco);
+        return "redirect:/enderecos/cliente/" + endereco.getCliente().getId();
     }
 }

@@ -25,6 +25,7 @@
             <td th:text="${end.cidade}"></td>
             <td th:text="${end.estado}"></td>
             <td>
+                <a th:href="@{'/enderecos/editar/' + ${end.id}}">Editar</a>
                 <a th:href="@{'/enderecos/excluir/' + ${end.id}}">Excluir</a>
             </td>
         </tr>
