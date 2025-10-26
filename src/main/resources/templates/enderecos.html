@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/><title>Endereços</title></head>
+<body>
+<h1>Endereços de <span th:text="${cliente.nome}"></span></h1>
+<a th:href="@{'/enderecos/novo/' + ${cliente.id}}">Novo Endereço</a>
+<table>
+    <thead><tr><th>ID</th><th>Rua</th><th>Cidade</th><th>CEP</th></tr></thead>
+    <tbody>
+        <tr th:each="end : ${listaDeEnderecos}">
+            <td th:text="${end.id}"></td>
+            <td th:text="${end.nomeLogradouro}"></td>
+            <td th:text="${end.numero}"></td>
+            <td th:text="${end.complemento}"></td>
+            <td th:text="${end.cep}"></td>
+            <td th:text="${end.cidade}"></td>
+            <td th:text="${end.estado}"></td>
+            <td>
+                <a th:href="@{'/enderecos/excluir/' + ${end.id}}">Excluir</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a th:href="@{/clientes}">Voltar aos clientes</a>
+</body>
+</html>

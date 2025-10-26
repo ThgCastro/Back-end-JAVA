@@ -26,12 +26,8 @@ public class ClienteService {
     }
 
 
-    public void createCliente(Cliente cliente){
-        clienteRepository.save(cliente);
-    }
-
     public List<Cliente> findAllCliente(){
-        return (List<Cliente>) clienteRepository.findAll();
+        return clienteRepository.findAll();
     }
 
     public Cliente findClienteById(Long id){
@@ -39,11 +35,15 @@ public class ClienteService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public Cliente saveCliente(Cliente cliente){
+        return clienteRepository.save(cliente);
+    }
+
     @Transactional
     public void deleteClienteById (Long id){
         Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente nao encontrado"));
         enderecoRepository.deleteAll(cliente.getEnderecos());
-        clienteRepository.delete(cliente);
+        clienteRepository.deleteById(id);
     }
 
     @Transactional

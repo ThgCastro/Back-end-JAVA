@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/><title>Endereco</title></head>
+<body>
+    <h1>Novo Endereço</h1>
+    <form th:action="@{/enderecos/salvar}" th:object="${endereco}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <label>Nome da rua: <input th:field="*{nomeLogradouro}"/></label><br/>
+        <label>Numero: <input th:field="*{numero}"/></label><br/>
+        <label>Complemento: <input th:field="*{complemento}"/></label><br/>
+        <label>CEP: <input th:field="*{cep}"/></label><br/>
+        <label>Cidade: <input th:field="*{cidade}"/></label><br/>
+        <label>Estado: <input th:field="*{estado}"/></label><br/>
+
+        <!-- vínculo com cliente -->
+        <input type="hidden" th:field="*{cliente.id}" />
+        <button type="submit">Salvar</button>
+    </form>
+    <a th:href="@{'/enderecos/cliente/' + ${endereco.cliente.id}}">Voltar</a>
+</body>
+</html>

@@ -29,13 +29,13 @@ public class TesteConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Cliente cli1 = new Cliente(null, LocalDate.parse("01-01-2000", dtf), "123456789", "João Silva");
-        Cliente cli2 = new Cliente(null, LocalDate.parse("20-12-1985" ,dtf), "987654321", "Maria Souza");
+        Cliente cli1 = new Cliente(LocalDate.parse("01-01-2000", dtf), "123456789", "João Silva");
+        Cliente cli2 = new Cliente(LocalDate.parse("20-12-1985" ,dtf), "987654321", "Maria Souza");
 
 
-        Endereco end1 = new Endereco(null, null, 40028922, "Rua da Paz", "São Paulo", "São Paulo", 123);
-        Endereco end2 = new Endereco(null, "bloco 5", 30303090, "Rua da Morte", "São Paulo", "São Paulo", 290);
-        Endereco end3 = new Endereco(null, "Apto 10", 90876437, "Rua Das Flores", "São Paulo", "São Paulo", 128);
+        Endereco end1 = new Endereco(null, 40028922, "Rua da Paz", "São Paulo", "São Paulo", 123);
+        Endereco end2 = new Endereco("bloco 5", 30303090, "Rua da Morte", "São Paulo", "São Paulo", 290);
+        Endereco end3 = new Endereco("Apto 10", 90876437, "Rua Das Flores", "São Paulo", "São Paulo", 128);
 
         end1.setCliente(cli1);
         end2.setCliente(cli1);

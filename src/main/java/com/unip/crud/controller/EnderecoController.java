@@ -1,17 +1,14 @@
 package com.unip.crud.controller;
 
 import com.unip.crud.model.Endereco;
+import com.unip.crud.services.ClienteService;
 import com.unip.crud.services.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,34 +17,41 @@ import java.util.List;
 @RequestMapping("/enderecos")
 public class EnderecoController {
 
-    @Autowired
-    private EnderecoService enderecoService;
+    private final EnderecoService enderecoService;
+    private final ClienteService clienteService;
 
-    @PostMapping
-    public ResponseEntity<Void> createEndereco(@RequestBody Endereco endereco){
-        enderecoService.createEndereco(endereco);
-        return ResponseEntity.ok().build();
+    public EnderecoController(EnderecoService enderecoService, ClienteService clienteService) {
+        this.enderecoService = enderecoService;
+        this.clienteService = clienteService;
     }
 
-    @GetMapping
-    public List<Endereco> findAllEndereco(){
-        return enderecoService.findAllEndereco();
+    @GetMapping("/cliente/{clienteId}")
+    public String listarPorCliente(@PathVariable Long clienteId, Model model){
+        model.addAttribute("cliente", clienteService.findClienteById(clienteId));
+        model.addAttribute("listaDeEnderecos", enderecoService.findByClienteId(clienteId));
+        return "enderecos";
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Endereco> findEnderecoById(@PathVariable Long id){
-        return ResponseEntity.ok(enderecoService.findEnderecoById(id));
+    @GetMapping("novo/{clienteId}")
+    public String novoEnderecoForm(@PathVariable Long clienteId, Model model){
+        Endereco endereco = new Endereco();
+        endereco.setCliente(clienteService.findClienteById(clienteId));
+        model.addAttribute("endereco", endereco);
+        return "endereco_form";
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> deleteEnderecoById(@PathVariable Long id){
-        enderecoService.deleteEndereco(id);
-        return ResponseEntity.ok().build();
+    @PostMapping("/salvar")
+    public String salvarEndereco(@ModelAttribute("endereco") Endereco endereco){
+        enderecoService.saveEndereco(endereco);
+        return "redirect:/enderecos/cliente/" + endereco.getCliente().getId();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateEnderecoById(@PathVariable Long id, @RequestBody Endereco endereco){
-        enderecoService.updateEnderecoById(id, endereco);
-        return ResponseEntity.ok().build();
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id){
+        Endereco endereco = enderecoService.findAllEndereco().stream().filter(e -> e.getId().equals(id)).findFirst().orElse(null);
+        Long clienteId = (endereco != null && endereco.getCliente() != null) ? endereco.getCliente().getId() : null;
+        enderecoService.deleteEnderecoById(id);
+        if(clienteId != null) return "redirect:/enderecos/cliente/" + clienteId;
+        return "redirect:/clientes";
     }
 }

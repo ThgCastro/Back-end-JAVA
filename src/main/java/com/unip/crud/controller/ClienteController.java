@@ -8,46 +8,44 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
+@RequestMapping("/clientes")
 public class ClienteController {
 
     @Autowired
-    ClienteService clienteService;
+    private final ClienteService clienteService;
 
-    @PostMapping("/createCliente")
-    public ResponseEntity<Void> createCliente(@RequestBody Cliente cliente){
-        clienteService.createCliente(cliente);
-        return ResponseEntity.ok().build();
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
-    @GetMapping("/")
-    public String findAllCliente(Model model){
-        model.addAttribute("clientes",clienteService.findAllCliente());
-        return "allClientes";
+    @GetMapping
+    public String listar(Model model){
+        model.addAttribute("listaDeClientes", clienteService.findAllCliente());
+        return "clientes";
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<Cliente> findClienteById(@PathVariable Long id){
-        return ResponseEntity.ok(clienteService.findClienteById(id));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClienteById(@PathVariable Long id) {
-        clienteService.deleteClienteById(id);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateClienteById(@PathVariable Long id, @RequestBody Cliente cliente){
-        clienteService.updateClienteById(id, cliente);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/salvar")
-    public String addCliente(Model model){
+    @GetMapping("/novo")
+    public String novoForm(Model model){
         model.addAttribute("cliente", new Cliente());
-        return "salvarCliente";
+        return "cliente_form";
+    }
+
+    @PostMapping("/salvar")
+    public String salvar(@ModelAttribute("cliente") Cliente cliente){
+        clienteService.saveCliente(cliente);
+        return "redirect:/clientes";
+    }
+
+    @GetMapping("/editar/{id}")
+    public String editarForm(@PathVariable Long id, Model model){
+        model.addAttribute("cliente",  clienteService.findClienteById(id));
+        return "cliente_form";
+    }
+
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable Long id){
+        clienteService.deleteClienteById(id);
+        return "redirect:/clientes";
     }
 }

@@ -15,9 +15,6 @@ public class EnderecoService {
     @Autowired
     private EnderecoRepository enderecoRepository;
 
-    public void createEndereco(Endereco endereco){
-        enderecoRepository.save(endereco);
-    }
 
     public List<Endereco> findAllEndereco(){
         return enderecoRepository.findAll();
@@ -28,9 +25,16 @@ public class EnderecoService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public void deleteEndereco(Long id){
-        Endereco endereco = findEnderecoById(id);
-        enderecoRepository.delete(endereco);
+    public List<Endereco> findByClienteId(Long clienteId){
+        return enderecoRepository.findByClienteId(clienteId);
+    }
+
+    public void saveEndereco(Endereco endereco){
+        enderecoRepository.save(endereco);
+    }
+
+    public void deleteEnderecoById(Long id){
+        enderecoRepository.deleteById(id);
     }
 
     public void updateEnderecoById(Long id, Endereco enderecoAtualizado){
