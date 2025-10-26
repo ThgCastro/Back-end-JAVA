@@ -1,6 +1,7 @@
 package com.unip.crud.services;
 
 import com.unip.crud.model.Cliente;
+import com.unip.crud.model.Endereco;
 import com.unip.crud.repositories.ClienteRepository;
 import com.unip.crud.repositories.EnderecoRepository;
 import com.unip.crud.services.exceptions.ResourceNotFoundException;
@@ -17,6 +18,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
     private EnderecoRepository enderecoRepository;
 
     public ClienteService(EnderecoRepository enderecoRepository) {
@@ -29,7 +31,7 @@ public class ClienteService {
     }
 
     public List<Cliente> findAllCliente(){
-        return clienteRepository.findAll();
+        return (List<Cliente>) clienteRepository.findAll();
     }
 
     public Cliente findClienteById(Long id){
@@ -58,5 +60,12 @@ public class ClienteService {
             clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
         }
         clienteRepository.save(clienteExistente);
+    }
+
+    public Cliente salvarClienteEndereco(Cliente cliente){
+        for(Endereco e: cliente.getEnderecos()){
+            e.setCliente(cliente);
+        }
+        return clienteRepository.save(cliente);
     }
 }

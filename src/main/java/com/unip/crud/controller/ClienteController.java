@@ -4,7 +4,7 @@ import com.unip.crud.model.Cliente;
 import com.unip.crud.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +22,10 @@ public class ClienteController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public List<Cliente> findAllCliente(){
-        return clienteService.findAllCliente();
+    @GetMapping("/")
+    public String findAllCliente(Model model){
+        model.addAttribute("clientes",clienteService.findAllCliente());
+        return "allClientes";
     }
 
     @GetMapping(value = "/{id}")
@@ -42,5 +43,17 @@ public class ClienteController {
     public ResponseEntity<Void> updateClienteById(@PathVariable Long id, @RequestBody Cliente cliente){
         clienteService.updateClienteById(id, cliente);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/novo")
+    public String mostrarFormulario(Model model){
+        model.addAttribute("cliente", new Cliente());
+        return "formCliente";
+    }
+
+    @PostMapping("/salvar")
+    public String salvarCliente(@ModelAttribute Cliente cliente){
+        clienteService.salvarClienteEndereco(cliente);
+        return "redirect:/clientes/novo";
     }
 }
