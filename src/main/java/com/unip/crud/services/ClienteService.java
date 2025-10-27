@@ -45,27 +45,4 @@ public class ClienteService {
         enderecoRepository.deleteAll(cliente.getEnderecos());
         clienteRepository.deleteById(id);
     }
-
-    @Transactional
-    public void updateClienteById(Long id, Cliente clienteAtualizado){
-        Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-
-        if(clienteAtualizado.getNome() != null){
-            clienteExistente.setNome(clienteAtualizado.getNome());
-        }
-        if(clienteAtualizado.getCpf() != null){
-            clienteExistente.setCpf(clienteAtualizado.getCpf());
-        }
-        if(clienteAtualizado.getDataNascimento() != null){
-            clienteExistente.setDataNascimento(clienteAtualizado.getDataNascimento());
-        }
-        clienteRepository.save(clienteExistente);
-    }
-
-    public Cliente salvarClienteEndereco(Cliente cliente){
-        for(Endereco e: cliente.getEnderecos()){
-            e.setCliente(cliente);
-        }
-        return clienteRepository.save(cliente);
-    }
 }
