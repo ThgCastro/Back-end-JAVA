@@ -94,7 +94,7 @@
                 <a th:href="@{/enderecos}" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
                     Endereços
                 </a>
-                <a href="Relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                <a href="relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
                 Relatório Dinâmico
                 </a>
             </div>
@@ -110,7 +110,8 @@
                 <h2 class="text-2xl font-bold text-accent mb-6">Editar Cliente</h2>
 
                 <form id="edit-client-form" th:action="@{/clientes/salvar}" th:object="${cliente}" method="post">
-                    <input type="hidden" id="client-id" value="123">
+                    <input type="hidden" th:field="*{id}">
+
 
                     <h3 class="text-lg font-semibold mb-3 border-b border-input-border pb-2 text-primary-text">Dados do Cliente</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">

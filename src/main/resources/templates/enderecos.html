@@ -101,7 +101,7 @@
                     Endereços
                 </a>
                 <!-- Botão Inativo (Relatório) -->
-                <a href="Relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                <a href="relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
                     Relatório Dinâmico
                 </a>
             </div>
@@ -129,19 +129,19 @@
                     </tr>
                     </thead>
                     <tbody id="address-list" class="bg-primary-bg divide-y divide-input-border">
-                    <tr class="hover:bg-input-bg transition duration-200" th:each="endereco : ${listaDeEnderecos}">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" th:text="${endereco.id}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.nomeLogradouro}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.complemento}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.numero}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.cep}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.cidade}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.estado}"></td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
-                            <button class="text-accent hover:text-blue-400 mr-3"><a th:href="@{'/enderecos/editar/' + ${endereco.id}}">Editar</a></button>
-                            <button class="text-red-500 hover:text-red-400"><a th:href="@{'/enderecos/excluir/' + ${endereco.id}}">Excluir</a></button>
-                        </td>
-                    </tr>
+                        <tr class="hover:bg-input-bg transition duration-200" th:each="endereco : ${listaDeEnderecos}">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" th:text="${endereco.id}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.nomeLogradouro}"></td>
+                            <td class="px-6 py-4 text-sm" th:text="${endereco.complemento}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.numero}"></td>
+                            <td class="px-6 py-4 text-center text-sm" th:text="${endereco.cep}"></td>
+                            <td class="px-6 py-4 text-center text-sm" th:text="${endereco.cidade}"></td>
+                            <td class="px-6 py-4 text-center text-sm" th:text="${endereco.estado}"></td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                                <button class="text-accent hover:text-blue-400 mr-3"><a th:href="@{'/enderecos/editar/' + ${endereco.id}}">Editar</a></button>
+                                <button class="text-red-500 hover:text-red-400"><a th:href="@{'/enderecos/excluir/' + ${endereco.id}}">Excluir</a></button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

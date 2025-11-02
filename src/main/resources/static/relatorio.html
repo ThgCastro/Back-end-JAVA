@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Dinâmico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': 'var(--color-primary-bg)',
+                        'secondary-bg': 'var(--color-secondary-bg)',
+                        'primary-text': 'var(--color-primary-text)',
+                        'accent': 'var(--color-accent)',
+                        'input-bg': 'var(--color-input-bg)',
+                        'input-border': 'var(--color-input-border)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Variáveis de Tema (Dark Mode Padrão) */
+        :root {
+            --color-primary-bg: #1f2937; /* Gray 800 */
+            --color-secondary-bg: #111827; /* Gray 900 */
+            --color-primary-text: #f3f4f6; /* Gray 100 */
+            --color-accent: #3b82f6; /* Blue 500 */
+            --color-input-bg: #374151; /* Gray 700 (Fundo escuro para inputs) */
+            --color-input-border: #4b5563; /* Gray 600 */
+        }
+
+        /* Variáveis de Tema (Light Mode) */
+        .light {
+            --color-primary-bg: #f3f4f6; /* Gray 100 */
+            --color-secondary-bg: #ffffff; /* White */
+            --color-primary-text: #1f2937; /* Gray 800 - Texto escuro */
+            --color-accent: #10b981; /* Emerald 500 */
+            --color-input-bg: #ffffff; /* White (Fundo claro para inputs) */
+            --color-input-border: #d1d5db; /* Gray 300 - Borda visível */
+        }
+
+        /* Estilo para inputs e selects (Convertido para CSS puro para maior robustez) */
+        input[type="text"],
+        input[type="date"],
+        input[type="checkbox"],
+        select {
+            /* Propriedades baseadas nas variáveis de tema */
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-input-border);
+            color: var(--color-primary-text);
+
+            /* Propriedades estéticas (tailwind: rounded-lg, shadow-inner, w-full, p-2.5) */
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            display: block;
+            width: 100%;
+            padding: 0.625rem 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Ajustes específicos para checkbox */
+        input[type="checkbox"] {
+            width: 1rem; /* Tamanho do checkbox */
+            height: 1rem;
+            padding: 0;
+            display: inline-block; /* Alinha com o texto */
+        }
+
+        /* Ajusta o ícone de calendário (date input) para dark mode, invertendo a cor */
+        .dark input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Estilo para o placeholder em modo escuro */
+        .dark input::placeholder,
+        .dark select option {
+            color: #9ca3af; /* Gray 400 */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-primary-bg text-primary-text font-sans transition-colors duration-500 p-4 sm:p-8">
+
+<!-- Header e Botão de Tema -->
+<header class="flex justify-between items-center mb-8 pb-4 border-b border-input-border">
+    <h1 class="text-3xl font-bold text-accent">CRM Simulado (Visual Ativo)</h1>
+    <button id="theme-toggle" class="p-2 rounded-full bg-input-bg hover:bg-input-border transition duration-300 shadow-md">
+        <svg id="sun-icon" class="w-6 h-6 text-yellow-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <svg id="moon-icon" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    </button>
+</header>
+
+<div class="bg-secondary-bg p-6 rounded-xl shadow-2xl">
+
+
+    <div class="flex justify-between items-end border-b border-input-border mb-6 pb-3">
+
+        <!-- Tab Navigation (Agora como links/botões) -->
+        <div class="flex space-x-2" id="tab-buttons-container">
+            <!-- Botão Inativo (Clientes) -->
+            <a href="http://localhost:8080/clientes" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                Clientes
+            </a>
+            <!-- Botão Inativo (Endereços) -->
+            <a href="http://localhost:8080/enderecos" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                Endereços
+            </a>
+            <!-- Botão Ativo (Relatório) -->
+            <a href="#" class="px-5 py-2 text-sm font-semibold rounded-t-lg bg-accent text-white shadow-md">
+                Relatório Dinâmico
+            </a>
+        </div>
+
+    </div>
+
+
+    <div id="content-relatorio">
+        <h2 class="text-xl font-semibold mb-4 text-accent">Configuração do Relatório</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-input-bg p-4 rounded-lg shadow-inner mb-6">
+            <div>
+                <h3 class="font-medium mb-2 text-primary-text">Colunas do Cliente</h3>
+                <div id="report-cols-client" class="grid grid-cols-2 gap-2 text-sm">
+                    <!-- Checkboxes estáticos para Clientes -->
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="client" data-col="id" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">id</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="client" data-col="nome" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">nome</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="client" data-col="cpf" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">cpf</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="client" data-col="dataNascimento" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">data nascimento</span>
+                    </label>
+                </div>
+            </div>
+            <!-- Colunas de Endereço -->
+            <div>
+                <h3 class="font-medium mb-2 text-primary-text">Colunas do Endereço</h3>
+                <div id="report-cols-address" class="grid grid-cols-2 gap-2 text-sm">
+                    <!-- Checkboxes estáticos para Endereços -->
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="id" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">id</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="nomeLogradouro" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">nome logradouro</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="numero" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">número</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="complemento" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">complemento</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="cep" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">cep</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="cidade" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">cidade</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" data-table="address" data-col="estado" class="report-col-checkbox h-4 w-4 text-accent rounded transition duration-150 ease-in-out">
+                        <span class="capitalize text-primary-text">estado</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-xl font-semibold mt-8 mb-4 border-t border-input-border pt-4 text-accent">Resultado do Relatório</h2>
+
+        <div id="report-results" class="overflow-x-auto rounded-lg border border-input-border">
+            <p class="p-4 text-center text-gray-400">O relatório será gerado aqui.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const UI_Manager = {
+        selectors: {
+            // Tema
+            themeToggle: document.getElementById('theme-toggle'),
+            sunIcon: document.getElementById('sun-icon'),
+            moonIcon: document.getElementById('moon-icon'),
+        },
+
+        init: function() {
+            this.attachEventListeners();
+        },
+
+        attachEventListeners: function() {
+            const s = this.selectors;
+
+            // 1. Alternar Tema
+            if (s.themeToggle) {
+                s.themeToggle.addEventListener('click', this.toggleTheme.bind(this));
+            }
+        },
+
+        // --- Tema ---
+        toggleTheme: function() {
+            const isDark = document.documentElement.classList.toggle('light');
+            document.documentElement.classList.toggle('dark', !isDark);
+            this.selectors.sunIcon.classList.toggle('hidden', isDark);
+            this.selectors.moonIcon.classList.toggle('hidden', !isDark);
+        }
+    };
+
+    // Inicializa a interface
+    window.onload = function() {
+        UI_Manager.init();
+    };
+
+    // Dados simulados
+    const clientes = [
+        { id: 1, nome: "Thiago Silva", cpf: "123.456.789-00", dataNascimento: "2005-05-02"},
+        { id: 2, nome: "Maria Oliveira",cpf: "987.654.321-00", dataNascimento: "1998-03-12"},
+    ];
+
+    const enderecos = [
+        { id: 1, id_proprietario: 1, nomeLogradouro: "Rua das Flores", numero: "123", complemento: "Apt 101", cep: "12345-678", cidade: "São Paulo", estado: "SP" },
+        { id: 2, id_proprietario: 1, nomeLogradouro: "Avenida Brasil", numero: "456", complemento: "", cep: "87654-321", cidade: "Rio de Janeiro", estado: "RJ" },
+        { id: 3, id_proprietario: 2, nomeLogradouro: "Rua das Acácias", numero: "789", complemento: "", cep: "11223-445", cidade: "Belo Horizonte", estado: "MG" },
+    ];
+
+    function gerarRelatorio() {
+        const checkboxes = document.querySelectorAll('.report-col-checkbox');
+        const colunasSelecionadas = { client: [], address: [] };
+
+        checkboxes.forEach(cb => {
+            if(cb.checked) {
+                colunasSelecionadas[cb.dataset.table].push(cb.dataset.col);
+            }
+        });
+
+        const resultsContainer = document.getElementById('report-results');
+        resultsContainer.innerHTML = '';
+
+        if(colunasSelecionadas.client.length === 0 && colunasSelecionadas.address.length === 0) {
+            resultsContainer.innerHTML = '<p class="p-4 text-center text-gray-400">Selecione pelo menos uma coluna para gerar o relatório.</p>';
+            return;
+        }
+
+        const table = document.createElement('table');
+        table.className = "min-w-full text-sm border-collapse border border-input-border";
+
+        const thead = document.createElement('thead');
+        thead.className = "bg-input-bg";
+
+        const headerRow = document.createElement('tr');
+
+        colunasSelecionadas.client.forEach(col => {
+            const th = document.createElement('th');
+            th.className = "border border-input-border px-4 py-2 text-left";
+            th.textContent = col.replace(/([A-Z])/g, ' $1').toLowerCase();
+            headerRow.appendChild(th);
+        });
+
+        colunasSelecionadas.address.forEach(col => {
+            const th = document.createElement('th');
+            th.className = "border border-input-border px-4 py-2 text-left";
+            th.textContent = col.replace(/([A-Z])/g, ' $1').toLowerCase();
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement('tbody');
+
+        clientes.forEach(cliente => {
+            // Filtra endereços do cliente
+            const enderecosCliente = enderecos.filter(e => e.id_proprietario === cliente.id);
+
+            // Se não tiver endereço, cria pelo menos uma linha
+            if(enderecosCliente.length === 0) {
+                const row = document.createElement('tr');
+                row.className = "bg-primary-bg even:bg-secondary-bg";
+
+                colunasSelecionadas.client.forEach(col => {
+                    const td = document.createElement('td');
+                    td.className = "border border-input-border px-4 py-2";
+                    td.textContent = cliente[col] ?? '';
+                    row.appendChild(td);
+                });
+
+                colunasSelecionadas.address.forEach(() => {
+                    const td = document.createElement('td');
+                    td.className = "border border-input-border px-4 py-2";
+                    td.textContent = '';
+                    row.appendChild(td);
+                });
+
+                tbody.appendChild(row);
+            } else {
+                // Para cada endereço, cria uma linha combinando cliente + endereço
+                enderecosCliente.forEach(endereco => {
+                    const row = document.createElement('tr');
+                    row.className = "bg-primary-bg even:bg-secondary-bg";
+
+                    colunasSelecionadas.client.forEach(col => {
+                        const td = document.createElement('td');
+                        td.className = "border border-input-border px-4 py-2";
+                        td.textContent = cliente[col] ?? '';
+                        row.appendChild(td);
+                    });
+
+                    colunasSelecionadas.address.forEach(col => {
+                        const td = document.createElement('td');
+                        td.className = "border border-input-border px-4 py-2";
+                        td.textContent = endereco[col] ?? '';
+                        row.appendChild(td);
+                    });
+
+                    tbody.appendChild(row);
+                });
+            }
+        });
+
+        table.appendChild(tbody);
+        resultsContainer.appendChild(table);
+    }
+
+    // Evento nas checkboxes
+    const reportCheckboxes = document.querySelectorAll('.report-col-checkbox');
+    reportCheckboxes.forEach(cb => {
+        cb.addEventListener('change', gerarRelatorio);
+    });
+
+    // Inicializa relatório
+    gerarRelatorio();
+</script>
+</body>
+</html>

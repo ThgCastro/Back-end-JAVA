@@ -95,7 +95,7 @@
                 <a th:href="@{/enderecos}" class="px-5 py-2 text-sm font-semibold rounded-t-lg bg-accent text-white shadow-md">
                 Endereços
             </a>
-                <a href="Relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                <a href="relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
                 Relatório Dinâmico
             </a>
             </div>
@@ -111,8 +111,8 @@
             <h2 class="text-2xl font-bold text-accent mb-6">Editar Endereço</h2>
 
             <form id="edit-address-form" th:action="@{/enderecos/salvar}" th:object="${endereco}" method="post">
-                <input type="hidden" th:field="*{id}" />
-                <input type="hidden" th:field="*{cliente.id}" />
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{cliente.id}"/>
 
                 <div>
                     <h3 class="text-lg font-semibold mb-3 border-b border-input-border pb-2 text-primary-text mt-4">Dados do Endereço</h3>
