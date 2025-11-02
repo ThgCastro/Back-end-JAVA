@@ -20,6 +20,12 @@ public class EnderecoController {
         this.clienteService = clienteService;
     }
 
+    @GetMapping
+    public String listar(Model model){
+        model.addAttribute("listaDeEnderecos", enderecoService.findAllEndereco());
+        return "enderecos";
+    }
+
     @GetMapping("/cliente/{clienteId}")
     public String listarPorCliente(@PathVariable Long clienteId, Model model){
         model.addAttribute("cliente", clienteService.findClienteById(clienteId));
@@ -32,7 +38,7 @@ public class EnderecoController {
         Endereco endereco = new Endereco();
         endereco.setCliente(clienteService.findClienteById(clienteId));
         model.addAttribute("endereco", endereco);
-        return "endereco_form";
+        return "editarEndereco";
     }
 
     @PostMapping("/salvar")
@@ -54,7 +60,7 @@ public class EnderecoController {
     public String editarForm(@PathVariable Long id, Model model){
         Endereco endereco = enderecoService.findEnderecoById(id);
         model.addAttribute("endereco", endereco);
-        return "endereco_form";
+        return "editarEndereco";
     }
 
     @PostMapping("/atualizar")

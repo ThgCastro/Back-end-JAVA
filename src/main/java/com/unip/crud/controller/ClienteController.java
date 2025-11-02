@@ -1,6 +1,7 @@
 package com.unip.crud.controller;
 
 import com.unip.crud.model.Cliente;
+import com.unip.crud.model.Endereco;
 import com.unip.crud.services.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
     private final ClienteService clienteService;
 
     public ClienteController(ClienteService clienteService) {
@@ -27,12 +27,17 @@ public class ClienteController {
 
     @GetMapping("/novo")
     public String novoForm(Model model){
-        model.addAttribute("cliente", new Cliente());
-        return "cliente_form";
+        Cliente cliente = new Cliente();
+        cliente.getEnderecos().add(new Endereco());
+        model.addAttribute("cliente", cliente);
+        return "cadastrar";
     }
 
     @PostMapping("/salvar")
     public String salvar(@ModelAttribute("cliente") Cliente cliente){
+        for(Endereco e :  cliente.getEnderecos()){
+            e.setCliente(cliente);
+        }
         clienteService.saveCliente(cliente);
         return "redirect:/clientes";
     }
@@ -40,7 +45,7 @@ public class ClienteController {
     @GetMapping("/editar/{id}")
     public String editarForm(@PathVariable Long id, Model model){
         model.addAttribute("cliente",  clienteService.findClienteById(id));
-        return "cliente_form";
+        return "editarCliente";
     }
 
     @GetMapping("/excluir/{id}")

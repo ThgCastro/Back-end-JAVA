@@ -23,7 +23,7 @@ public class Cliente {
     private String nome;
 
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Endereco> enderecos = new ArrayList<>();
 

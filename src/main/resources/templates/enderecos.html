@@ -1,36 +1,186 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head><meta charset="UTF-8"/><title>Endereços</title></head>
-<body>
-<h1>Endereços de <span th:text="${cliente.nome}"></span></h1>
-<a th:href="@{'/enderecos/novo/' + ${cliente.id}}">Novo Endereço</a>
-<table>
-    <thead><tr>
-        <th>ID</th>
-        <th>Logradouro</th>
-        <th>Complemento</th>
-        <th>Numero</th>
-        <th>CEP</th>
-        <th>Cidade</th>
-        <th>Estado</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr th:each="end : ${listaDeEnderecos}">
-            <td th:text="${end.id}"></td>
-            <td th:text="${end.nomeLogradouro}"></td>
-            <td th:text="${end.complemento}"></td>
-            <td th:text="${end.numero}"></td>
-            <td th:text="${end.cep}"></td>
-            <td th:text="${end.cidade}"></td>
-            <td th:text="${end.estado}"></td>
-            <td>
-                <a th:href="@{'/enderecos/editar/' + ${end.id}}">Editar</a>
-                <a th:href="@{'/enderecos/excluir/' + ${end.id}}">Excluir</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<a th:href="@{/clientes}">Voltar aos clientes</a>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endereços</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': 'var(--color-primary-bg)',
+                        'secondary-bg': 'var(--color-secondary-bg)',
+                        'primary-text': 'var(--color-primary-text)',
+                        'accent': 'var(--color-accent)',
+                        'input-bg': 'var(--color-input-bg)',
+                        'input-border': 'var(--color-input-border)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Variáveis de Tema (Dark Mode Padrão) */
+        :root {
+            --color-primary-bg: #1f2937; /* Gray 800 */
+            --color-secondary-bg: #111827; /* Gray 900 */
+            --color-primary-text: #f3f4f6; /* Gray 100 */
+            --color-accent: #3b82f6; /* Blue 500 */
+            --color-input-bg: #374151; /* Gray 700 (Fundo escuro para inputs) */
+            --color-input-border: #4b5563; /* Gray 600 */
+        }
+
+        /* Variáveis de Tema (Light Mode) */
+        .light {
+            --color-primary-bg: #f3f4f6; /* Gray 100 */
+            --color-secondary-bg: #ffffff; /* White */
+            --color-primary-text: #1f2937; /* Gray 800 - Texto escuro */
+            --color-accent: #10b981; /* Emerald 500 */
+            --color-input-bg: #ffffff; /* White (Fundo claro para inputs) */
+            --color-input-border: #d1d5db; /* Gray 300 - Borda visível */
+        }
+
+        /* Estilo para inputs e selects (Convertido para CSS puro para maior robustez) */
+        input[type="text"],
+        input[type="date"],
+        select {
+            /* Propriedades baseadas nas variáveis de tema */
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-input-border);
+            color: var(--color-primary-text);
+
+            /* Propriedades estéticas (tailwind: rounded-lg, shadow-inner, w-full, p-2.5) */
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            display: block;
+            width: 100%;
+            padding: 0.625rem 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Ajusta o ícone de calendário (date input) para dark mode, invertendo a cor */
+        .dark input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Estilo para o placeholder em modo escuro */
+        .dark input::placeholder,
+        .dark select option {
+            color: #9ca3af; /* Gray 400 */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-primary-bg text-primary-text font-sans transition-colors duration-500 p-4 sm:p-8">
+
+    <header class="flex justify-between items-center mb-8 pb-4 border-b border-input-border">
+        <h1 class="text-3xl font-bold text-accent">CRM Simulado (Visual Ativo)</h1>
+        <!-- O botão de tema agora tem o evento JS -->
+        <button id="theme-toggle" class="p-2 rounded-full bg-input-bg hover:bg-input-border transition duration-300 shadow-md">
+            <!-- Icones visuais do tema -->
+            <svg id="sun-icon" class="w-6 h-6 text-yellow-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="moon-icon" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+    </header>
+
+    <div class="bg-secondary-bg p-6 rounded-xl shadow-2xl">
+
+        <!-- Cabeçalho unificado para abas e botão de cadastro -->
+        <div class="flex justify-between items-end border-b border-input-border mb-6 pb-3">
+
+            <!-- Tab Navigation (Agora como links/botões) -->
+            <div class="flex space-x-2" id="tab-buttons-container">
+                <!-- Botão Inativo (Clientes) -->
+                <a th:href="@{/clientes}" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                    Clientes
+                </a>
+                <!-- Botão Ativo (Endereços) -->
+                <a th:href="@{/enderecos}" class="px-5 py-2 text-sm font-semibold rounded-t-lg bg-accent text-white shadow-md">
+                    Endereços
+                </a>
+                <!-- Botão Inativo (Relatório) -->
+                <a href="Relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                    Relatório Dinâmico
+                </a>
+            </div>
+
+            <!-- Botão de Cadastro PRINCIPAL (Agora como Link) -->
+            <a th:href="@{/clientes/novo}" id="btn-add-cliente" class="px-4 py-2 bg-accent text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
+                + Cadastrar Cliente / Endereço
+            </a>
+        </div>
+
+        <!-- Content: Endereços -->
+        <div id="content-enderecos">
+            <div class="overflow-x-auto rounded-lg border border-input-border">
+                <table class="min-w-full divide-y divide-input-border">
+                    <thead class="bg-input-bg">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-text uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-text uppercase tracking-wider">Logradouro</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-text uppercase tracking-wider">Complemento</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-primary-text uppercase tracking-wider">Número</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-primary-text uppercase tracking-wider">CEP</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-primary-text uppercase tracking-wider">Cidade</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-primary-text uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-primary-text uppercase tracking-wider">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="address-list" class="bg-primary-bg divide-y divide-input-border">
+                    <tr class="hover:bg-input-bg transition duration-200" th:each="endereco : ${listaDeEnderecos}">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium" th:text="${endereco.id}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.nomeLogradouro}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.complemento}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.numero}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.cep}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.cidade}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm" th:text="${endereco.estado}"></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                            <button class="text-accent hover:text-blue-400 mr-3"><a th:href="@{'/enderecos/editar/' + ${endereco.id}}">Editar</a></button>
+                            <button class="text-red-500 hover:text-red-400"><a th:href="@{'/enderecos/excluir/' + ${endereco.id}}">Excluir</a></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>const UI_Manager = {
+            selectors: {
+                // Tema
+                themeToggle: document.getElementById('theme-toggle'),
+                sunIcon: document.getElementById('sun-icon'),
+                moonIcon: document.getElementById('moon-icon'),
+            },
+
+            init: function() {
+                this.attachEventListeners();
+            },
+
+            attachEventListeners: function() {
+                const s = this.selectors;
+
+                // 1. Alternar Tema
+                if (s.themeToggle) {
+                    s.themeToggle.addEventListener('click', this.toggleTheme.bind(this));
+                }
+            },
+
+            // --- Tema ---
+            toggleTheme: function() {
+                const isDark = document.documentElement.classList.toggle('light');
+                document.documentElement.classList.toggle('dark', !isDark);
+                this.selectors.sunIcon.classList.toggle('hidden', isDark);
+                this.selectors.moonIcon.classList.toggle('hidden', !isDark);
+            }
+        };
+
+        // Inicializa a interface
+        window.onload = function() {
+            UI_Manager.init();
+        };
+    </script>
 </body>
 </html>

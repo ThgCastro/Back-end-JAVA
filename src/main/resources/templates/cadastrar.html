@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Cliente/Endereço</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': 'var(--color-primary-bg)',
+                        'secondary-bg': 'var(--color-secondary-bg)',
+                        'primary-text': 'var(--color-primary-text)',
+                        'accent': 'var(--color-accent)',
+                        'input-bg': 'var(--color-input-bg)',
+                        'input-border': 'var(--color-input-border)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Variáveis de Tema (Dark Mode Padrão) */
+        :root {
+            --color-primary-bg: #1f2937; /* Gray 800 */
+            --color-secondary-bg: #111827; /* Gray 900 */
+            --color-primary-text: #f3f4f6; /* Gray 100 */
+            --color-accent: #3b82f6; /* Blue 500 */
+            --color-input-bg: #374151; /* Gray 700 (Fundo escuro para inputs) */
+            --color-input-border: #4b5563; /* Gray 600 */
+        }
+
+        /* Variáveis de Tema (Light Mode) */
+        .light {
+            --color-primary-bg: #f3f4f6; /* Gray 100 */
+            --color-secondary-bg: #ffffff; /* White */
+            --color-primary-text: #1f2937; /* Gray 800 - Texto escuro */
+            --color-accent: #10b981; /* Emerald 500 */
+            --color-input-bg: #ffffff; /* White (Fundo claro para inputs) */
+            --color-input-border: #d1d5db; /* Gray 300 - Borda visível */
+        }
+
+        /* Estilo para inputs e selects (Convertido para CSS puro para maior robustez) */
+        input[type="text"],
+        input[type="date"],
+        input[type="checkbox"],
+        select {
+            /* Propriedades baseadas nas variáveis de tema */
+            background-color: var(--color-input-bg);
+            border: 1px solid var(--color-input-border);
+            color: var(--color-primary-text);
+
+            /* Propriedades estéticas (tailwind: rounded-lg, shadow-inner, w-full, p-2.5) */
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            display: block;
+            width: 100%;
+            padding: 0.625rem 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Ajustes específicos para checkbox */
+        input[type="checkbox"] {
+            width: 1rem; /* Tamanho do checkbox */
+            height: 1rem;
+            padding: 0;
+            display: inline-block; /* Alinha com o texto */
+            /* Remove a cor de fundo e borda padrão para aplicar as variáveis */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        /* Estilizando o checkbox customizado */
+        input[type="checkbox"]:checked {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        /* Adicionando um "check" visual */
+        input[type="checkbox"]:checked::after {
+            content: '✔';
+            display: block;
+            color: var(--color-secondary-bg); /* Cor do check */
+            text-align: center;
+            line-height: 0.8rem;
+            font-size: 0.7rem;
+        }
+
+        /* Ajusta o ícone de calendário (date input) para dark mode, invertendo a cor */
+        .dark input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Estilo para o placeholder em modo escuro */
+        .dark input::placeholder,
+        .dark select option {
+            color: #9ca3af; /* Gray 400 */
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-primary-bg text-primary-text font-sans transition-colors duration-500 p-4 sm:p-8">
+
+    <header class="flex justify-between items-center mb-8 pb-4 border-b border-input-border">
+        <h1 class="text-3xl font-bold text-accent">CRM Simulado (Visual Ativo)</h1>
+        <!-- O botão de tema agora tem o evento JS -->
+        <button id="theme-toggle" class="p-2 rounded-full bg-input-bg hover:bg-input-border transition duration-300 shadow-md">
+            <!-- Icones visuais do tema -->
+            <svg id="sun-icon" class="w-6 h-6 text-yellow-400 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <svg id="moon-icon" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        </button>
+    </header>
+
+    <div class="bg-secondary-bg p-6 rounded-xl shadow-2xl">
+
+        <!-- Cabeçalho unificado para abas -->
+        <div class="flex justify-between items-end border-b border-input-border mb-6 pb-3">
+
+            <!-- Tab Navigation (Agora como links/botões) -->
+            <!-- Botão "Cadastrar" removido da barra de navegação -->
+            <div class="flex space-x-2" id="tab-buttons-container">
+                <!-- Botão Inativo (Clientes) -->
+                <a th:href="@{/clientes}" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                    Clientes
+                </a>
+                <!-- Botão Inativo (Endereços) -->
+                <a th:href="@{/enderecos}" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                    Endereços
+                </a>
+                <!-- Botão Inativo (Relatório) -->
+                <a href="Relatorio.html" class="px-5 py-2 text-sm font-medium rounded-t-lg text-primary-text bg-input-bg hover:bg-input-border transition-colors duration-300">
+                    Relatório Dinâmico
+                </a>
+            </div>
+
+            <!-- Botão de Cadastro PRINCIPAL -->
+            <a th:href="@{/clientes/novo}" id="btn-add-cliente" class="px-4 py-2 bg-accent text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-300">
+                + Cadastrar Cliente / Endereço
+            </a>
+
+        </div>
+
+
+        <!-- Tab Content: Formulário de Cadastro -->
+        <!-- Centralizado e com largura máxima para se assemelhar ao modal -->
+        <div id="content-cadastro" class="max-w-2xl mx-auto">
+
+            <h2 class="text-2xl font-bold text-accent mb-6" id="modal-title">Cadastro de Cliente e Endereço</h2>
+
+            <form id="crud-form" th:action="@{/clientes/salvar}" th:object="${cliente}" method="post">
+                <input type="hidden" id="entity-type" value="client">
+                <input type="hidden" id="entity-id" value="">
+
+                <!-- Checkbox de Endereço Existente -->
+                <div class="mb-4 p-3 bg-input-bg rounded-lg shadow-inner border border-input-border">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" id="existing-client-toggle" class="form-checkbox h-5 w-5 text-accent rounded transition duration-150 ease-in-out" style="width: 1.25rem; height: 1.25rem;"> <!-- Tamanho ajustado -->
+                        <span class="text-sm font-medium ml-2">Endereço para cliente existente?</span>
+                    </label>
+                </div>
+
+                <!-- Seção Cliente (Visível por padrão) -->
+                <div id="client-fields">
+                    <h3 class="text-lg font-semibold mb-3 border-b border-input-border pb-2 text-primary-text">Dados do Cliente</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="nome" class="block text-sm font-medium mb-1">Nome</label>
+                            <input type="text" id="nome" name="nome" th:field="*{nome}">
+                        </div>
+                        <div>
+                            <label for="dataNascimento" class="block text-sm font-medium mb-1">Data de Nascimento</label>
+                            <input type="date" id="dataNascimento" name="dataNascimento" required th:field="*{dataNascimento}">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="cpf" class="block text-sm font-medium mb-1">CPF</label>
+                            <input type="text" id="cpf" name="cpf" required placeholder="000.000.000-00" th:field="*{cpf}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campo para ID de Cliente Existente (Escondido por padrão) -->
+                <div id="existing-client-id-field" class="hidden mb-4">
+                    <label for="existing-client-id" class="block text-sm font-medium mb-1">ID do Cliente Existente</label>
+                    <input type="text" id="existing-client-id" name="existing-client-id" placeholder="Ex: 1, 2, 3" required>
+                    <p class="text-xs text-gray-500 mt-1">Insira o ID de um cliente listado na tabela Clientes.</p>
+                </div>
+
+                <div id="address-fields">
+                    <h3 class="text-lg font-semibold mb-3 border-b border-input-border pb-2 text-primary-text mt-4">Dados do Endereço</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div th:each="endereco, iterStat : *{enderecos}">
+                            <label for="nomeLogradouro" class="block text-sm font-medium mb-1">Nome Logradouro</label>
+                            <input type="text" id="nomeLogradouro" name="nomeLogradouro" required th:field="*{enderecos[__${iterStat.index}__].nomeLogradouro}">
+                        </div>
+                        <div th:each="endereco, iterStat : *{enderecos}">
+                            <label for="numero" class="block text-sm font-medium mb-1">Número</label>
+                            <input type="text" id="numero" name="numero" required th:field="*{enderecos[__${iterStat.index}__].numero}">
+                        </div >
+                        <div th:each="endereco, iterStat : *{enderecos}">
+                            <label for="complemento" class="block text-sm font-medium mb-1">Complemento (Opcional)</label>
+                            <input type="text" id="complemento" name="complemento" th:field="*{enderecos[__${iterStat.index}__].complemento}">
+                        </div>
+                        <div th:each="endereco, iterStat : *{enderecos}">
+                            <label for="cep" class="block text-sm font-medium mb-1">CEP</label>
+                            <input type="text" id="cep" name="cep" required placeholder="00000-000" th:field="*{enderecos[__${iterStat.index}__].cep}">
+                        </div>
+                        <div th:each="endereco, iterStat : *{enderecos}">
+                            <label for="cidade" class="block text-sm font-medium mb-1">Cidade</label>
+                            <input type="text" id="cidade" name="cidade" required th:field="*{enderecos[__${iterStat.index}__].cidade}">
+                        </div>
+                        <div class="md:col-span-2" th:each="endereco, iterStat : *{enderecos}">
+                            <label for="estado" class="block text-sm font-medium mb-1">Estado</label>
+                            <input type="text" id="estado" name="estado" required placeholder="Ex: SP, RJ" th:field="*{enderecos[__${iterStat.index}__].estado}">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-2 bg-accent text-white font-bold rounded-lg hover:bg-blue-600 transition duration-300 mt-4" id="btn-submit-modal">
+                    Salvar
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+    <script>
+        const UI_Manager = {
+            selectors: {
+                // Tema
+                themeToggle: document.getElementById('theme-toggle'),
+                sunIcon: document.getElementById('sun-icon'),
+                moonIcon: document.getElementById('moon-icon'),
+
+                // Toggle de Campos do Formulário
+                existingClientToggle: document.getElementById('existing-client-toggle'),
+                clientFields: document.getElementById('client-fields'),
+                existingClientIdField: document.getElementById('existing-client-id-field'),
+            },
+
+            init: function() {
+                this.attachEventListeners();
+                // Garante que o estado inicial do formulário esteja correto
+                this.toggleExistingClientFields();
+            },
+
+            attachEventListeners: function() {
+                const s = this.selectors;
+
+                // 1. Alternar Tema
+                if (s.themeToggle) {
+                    s.themeToggle.addEventListener('click', this.toggleTheme.bind(this));
+                }
+
+                // 2. Toggle de Campos no Formulário
+                if (s.existingClientToggle) {
+                    s.existingClientToggle.addEventListener('change', this.toggleExistingClientFields.bind(this));
+                }
+            },
+
+            // --- Tema ---
+            toggleTheme: function() {
+                const isDark = document.documentElement.classList.toggle('light');
+                document.documentElement.classList.toggle('dark', !isDark);
+                this.selectors.sunIcon.classList.toggle('hidden', isDark);
+                this.selectors.moonIcon.classList.toggle('hidden', !isDark);
+            },
+
+            // --- Toggle de Campos do Formulário ---
+            toggleExistingClientFields: function() {
+                const s = this.selectors;
+
+                // Verifica se os elementos existem antes de tentar acessá-los
+                if (!s.existingClientToggle || !s.clientFields || !s.existingClientIdField) {
+                    console.warn("Elementos do formulário de toggle não encontrados.");
+                    return;
+                }
+
+                const isExisting = s.existingClientToggle.checked;
+
+                // Alterna visibilidade
+                s.clientFields.classList.toggle('hidden', isExisting);
+                s.existingClientIdField.classList.toggle('hidden', !isExisting);
+            }
+        };
+
+        window.onload = function() {
+            UI_Manager.init();
+        };
+    </script>
+</body>
+</html>
