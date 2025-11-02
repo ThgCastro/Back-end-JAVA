@@ -3,8 +3,6 @@ package com.unip.crud.controller;
 import com.unip.crud.model.Cliente;
 import com.unip.crud.model.Endereco;
 import com.unip.crud.services.ClienteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +32,20 @@ public class ClienteController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(@ModelAttribute("cliente") Cliente cliente){
-        for(Endereco e :  cliente.getEnderecos()){
-            e.setCliente(cliente);
+    public String salvar(@ModelAttribute("cliente") Cliente cliente, @RequestParam(value = "clienteId", required = false) Long clienteId){
+        if(clienteId != null){
+            Cliente clienteExistente = clienteService.findClienteById(clienteId);
+            for (Endereco e : cliente.getEnderecos()) {
+                e.setCliente(clienteExistente);
+            }
+            clienteExistente.getEnderecos().addAll(cliente.getEnderecos());
+            clienteService.saveCliente(clienteExistente);
+        } else{
+            for(Endereco e :  cliente.getEnderecos()){
+                e.setCliente(cliente);
+            }
+            clienteService.saveCliente(cliente);
         }
-        clienteService.saveCliente(cliente);
         return "redirect:/clientes";
     }
 
