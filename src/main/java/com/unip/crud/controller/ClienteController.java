@@ -24,7 +24,7 @@ public class ClienteController {
     }
 
     @GetMapping("/novo")
-    public String novoForm(Model model){
+    public String novoForm(Model model) {
         Cliente cliente = new Cliente();
         cliente.getEnderecos().add(new Endereco());
         model.addAttribute("cliente", cliente);

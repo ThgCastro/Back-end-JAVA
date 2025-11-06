@@ -62,10 +62,4 @@ public class EnderecoController {
         model.addAttribute("endereco", endereco);
         return "editarEndereco";
     }
-
-    @PostMapping("/atualizar")
-    public String atualizar(@ModelAttribute Endereco endereco){
-        enderecoService.saveEndereco(endereco);
-        return "redirect:/enderecos/cliente/" + endereco.getCliente().getId();
-    }
 }
