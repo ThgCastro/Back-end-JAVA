@@ -44,7 +44,7 @@ public class EnderecoController {
     @PostMapping("/salvar")
     public String salvarEndereco(@ModelAttribute("endereco") Endereco endereco){
         enderecoService.saveEndereco(endereco);
-        return "redirect:/enderecos/cliente/" + endereco.getCliente().getId();
+        return "redirect:/enderecos";
     }
 
     @GetMapping("/excluir/{id}")
